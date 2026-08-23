@@ -144,25 +144,44 @@ export function Topbar({
   }, [])
 
   return (
-    <header className="sticky top-0 z-30 flex min-h-16 items-center justify-between border-b border-slate-200 bg-white/95 px-4 backdrop-blur sm:px-6 lg:px-8">
+    <header
+  className="
+    sticky top-0 z-30
+    flex h-16 shrink-0
+    items-center justify-between
+    border-b
+    border-slate-200/70
+    bg-white/85
+    px-4
+    backdrop-blur-xl
+    transition-colors
+    duration-200
+
+    dark:border-slate-800/70
+    dark:bg-slate-950/85
+
+    sm:px-6
+    lg:px-8
+  "
+>
       {/* Left */}
       <div className="flex min-w-0 items-center gap-3">
         <button
           type="button"
           onClick={onMenuClick}
           aria-label="Open navigation"
-          className="rounded-xl p-2 text-slate-600 transition hover:bg-slate-100 lg:hidden"
+          className="rounded-xl border border-slate-200 p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:text-slate-400 dark:hover:bg-slate-900 dark:hover:text-white lg:hidden"
         >
           <Menu size={21} />
         </button>
 
         <div className="min-w-0">
-          <h1 className="truncate text-lg font-bold tracking-tight text-slate-900 sm:text-xl">
+          <h1 className="truncate text-base font-bold tracking-tight text-slate-900 dark:text-white sm:text-lg">
             {title}
           </h1>
 
           {subtitle && (
-            <p className="hidden truncate text-xs text-slate-500 sm:block">
+            <p className="hidden truncate text-[11px] text-slate-500 dark:text-slate-400 sm:block">
               {subtitle}
             </p>
           )}
@@ -171,11 +190,24 @@ export function Topbar({
 
       {searchOpen && (
       <div className="absolute right-4 top-14 z-40 w-[calc(100vw-2rem)] max-w-md sm:right-6 sm:w-96 lg:right-8">
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/10 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/30">
 
           {/* Search input */}
           <div className="p-3">
-            <div className="flex items-center gap-2 rounded-xl border border-violet-300 bg-white px-3 py-2.5 ring-2 ring-violet-100">
+            <div
+              className="
+                flex items-center gap-2
+                rounded-xl
+                border border-violet-300
+                bg-white
+                px-3 py-2.5
+                ring-2 ring-violet-100
+
+                dark:border-violet-500/40
+                dark:bg-slate-800
+                dark:ring-violet-500/10
+              "
+            >
               <Search
                 size={18}
                 className="shrink-0 text-slate-400"
@@ -189,7 +221,7 @@ export function Topbar({
                 }
                 placeholder="Search tasks..."
                 autoFocus
-                className="min-w-0 flex-1 bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
+                className="min-w-0 flex-1 bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400 dark:text-slate-100 dark:placeholder:text-slate-500"
               />
 
               {searchQuery && (
@@ -206,7 +238,14 @@ export function Topbar({
 
           {/* Results */}
           {searchQuery.trim() && (
-            <div className="max-h-80 overflow-y-auto border-t border-slate-100">
+            <div
+              className="
+                max-h-80
+                overflow-y-auto
+                border-t border-slate-100
+                dark:border-slate-800
+              "
+            >
               {!hasResults ? (
                 <div className="px-4 py-8 text-center">
                   <Search
@@ -232,9 +271,18 @@ export function Topbar({
                         setSearchOpen(false)
                         setSearchQuery('')
                       }}
-                      className="w-full rounded-xl px-3 py-3 text-left transition hover:bg-slate-50"
+                      className="
+                        w-full rounded-xl
+                        px-3 py-3
+                        text-left
+                        transition
+
+                        hover:bg-slate-50
+
+                        dark:hover:bg-slate-800
+                      "
                     >
-                      <p className="truncate text-sm font-semibold text-slate-800">
+                      <p className="truncate text-sm font-semibold text-slate-800 dark:text-slate-100">
                         {task.title}
                       </p>
 
@@ -258,7 +306,7 @@ export function Topbar({
     )}
 
       {/* Right */}
-      <div className="flex items-center gap-2 sm:gap-3">
+      <div className="flex items-center gap-1.5 sm:gap-2">
         {/* Search */}
         <button
           type="button"
@@ -267,10 +315,10 @@ export function Topbar({
           }
           aria-label="Search tasks"
           className={[
-            'rounded-xl p-2.5 transition',
+            'flex h-10 w-10 items-center justify-center rounded-xl border transition-all',
             searchOpen
-              ? 'bg-violet-50 text-violet-600'
-              : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800',
+              ? 'border-violet-200 bg-violet-50 text-violet-600 shadow-sm dark:border-violet-500/30 dark:bg-violet-500/10 dark:text-violet-400'
+              : 'border-transparent text-slate-500 hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:border-slate-800 dark:hover:bg-slate-900 dark:hover:text-white',
           ].join(' ')}
         >
           <Search size={19} />
@@ -292,12 +340,12 @@ export function Topbar({
             aria-expanded={
               notificationsOpen
             }
-            className="relative rounded-xl p-2.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
+            className="relative flex h-10 w-10 items-center justify-center rounded-xl border border-transparent text-slate-500 transition-all hover:border-slate-200 hover:bg-slate-50 hover:text-slate-900 dark:text-slate-400 dark:hover:border-slate-800 dark:hover:bg-slate-900 dark:hover:text-white"
           >
             <Bell size={19} />
 
             {unreadCount > 0 && (
-              <span className="absolute right-1.5 top-1.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-600 px-1 text-[9px] font-bold leading-none text-white ring-2 ring-white">
+              <span className="absolute right-1 top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-violet-600 px-1 text-[9px] font-bold leading-none text-white ring-2 ring-white dark:ring-slate-950">
                 {unreadCount > 9
                   ? '9+'
                   : unreadCount}
@@ -307,7 +355,23 @@ export function Topbar({
 
           {/* Notification Dropdown */}
           {notificationsOpen && (
-            <div className="absolute right-0 top-12 z-50 w-[calc(100vw-2rem)] max-w-96 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10">
+            <div
+              className="
+                absolute right-0 top-12 z-50
+                w-[calc(100vw-2rem)]
+                max-w-96
+                overflow-hidden
+                rounded-2xl
+                border border-slate-200
+                bg-white
+                shadow-xl
+                shadow-slate-900/10
+
+                dark:border-slate-800
+                dark:bg-slate-900
+                dark:shadow-black/30
+              "
+            >
               {/* Header */}
               <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3">
                 <div>
@@ -369,8 +433,8 @@ export function Topbar({
                         className={[
                           'flex w-full gap-3 border-b border-slate-100 px-4 py-3 text-left transition last:border-b-0',
                           notification.read
-                            ? 'bg-white hover:bg-slate-50'
-                            : 'bg-violet-50/50 hover:bg-violet-50',
+                            ? 'bg-white hover:bg-slate-50 dark:bg-slate-900 dark:hover:bg-slate-800'
+                            : 'bg-violet-50/50 hover:bg-violet-50 dark:bg-violet-500/10 dark:hover:bg-violet-500/15',
                         ].join(' ')}
                       >
                         {/* Status */}
@@ -391,8 +455,8 @@ export function Topbar({
                             className={[
                               'text-sm leading-5',
                               notification.read
-                                ? 'font-medium text-slate-700'
-                                : 'font-semibold text-slate-900',
+                                ? 'font-medium text-slate-700 dark:text-slate-300'
+                                : 'font-semibold text-slate-900 dark:text-white',
                             ].join(' ')}
                           >
                             {
@@ -432,7 +496,7 @@ export function Topbar({
         </div>
 
         {/* Divider */}
-        <div className="hidden h-8 w-px bg-slate-200 sm:block" />
+        <div className="mx-1 hidden h-7 w-px bg-slate-200 dark:bg-slate-800 sm:block" />
 
         {/* Profile */}
         <div
@@ -448,7 +512,7 @@ export function Topbar({
             }
             aria-label="Open profile menu"
             aria-expanded={profileOpen}
-            className="flex items-center gap-2 rounded-xl p-1.5 transition hover:bg-slate-100"
+            className="flex items-center gap-2 rounded-xl border border-transparent p-1.5 transition-all hover:border-slate-200 hover:bg-slate-50 dark:hover:border-slate-800 dark:hover:bg-slate-900"
           >
             {user?.image ? (
               <img
@@ -463,7 +527,7 @@ export function Topbar({
               </div>
             )}
 
-            <span className="hidden text-sm font-medium text-slate-700 md:block">
+            <span className="hidden max-w-32 truncate text-sm font-semibold text-slate-700 dark:text-slate-200 md:block">
               {user
                 ? `${user.firstName} ${user.lastName}`
                 : 'User'}
@@ -471,9 +535,9 @@ export function Topbar({
           </button>
 
           {profileOpen && (
-            <div className="absolute right-0 top-12 z-50 w-64 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10">
+            <div className="absolute right-0 top-12 z-50 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl shadow-slate-900/10 dark:border-slate-800 dark:bg-slate-900 dark:shadow-black/30">
               {/* User information */}
-              <div className="border-b border-slate-100 px-4 py-4">
+              <div className="border-b border-slate-100 px-4 py-4 dark:border-slate-800">
                 <div className="flex items-center gap-3">
                   {user?.image ? (
                     <img
@@ -489,7 +553,7 @@ export function Topbar({
                   )}
 
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-slate-900">
+                    <p className="truncate text-sm font-semibold text-slate-900 dark:text-white">
                       {user
                         ? `${user.firstName} ${user.lastName}`
                         : 'User'}

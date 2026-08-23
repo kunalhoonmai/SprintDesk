@@ -2,17 +2,17 @@ import { useState } from 'react'
 import type { FormEvent } from 'react'
 
 import {
-  ArrowRight,
   Eye,
   EyeOff,
-  LoaderCircle,
   LockKeyhole,
   UserRound,
 } from 'lucide-react'
 
 import { useNavigate } from 'react-router-dom'
-
 import { useAuth } from '../hooks/useAuth'
+
+import { Button } from '../../../components/ui/Button'
+import { Input } from '../../../components/ui/Input'
 
 export function LoginForm() {
   const navigate = useNavigate()
@@ -100,33 +100,13 @@ export function LoginForm() {
             "
           />
 
-          <input
+          <Input
             id="username"
-            value={username}
-            onChange={(event) =>
-              setUsername(
-                event.target.value,
-              )
-            }
-            autoComplete="username"
+            name="username"
+            label="Username"
             placeholder="Enter your username"
-            disabled={isLoading}
-            className="
-              w-full rounded-xl
-              border border-slate-200
-              bg-white
-              py-3 pl-10 pr-4
-              text-sm text-slate-800
-              outline-none
-              transition
-              placeholder:text-slate-400
-              hover:border-slate-300
-              focus:border-violet-400
-              focus:ring-4
-              focus:ring-violet-50
-              disabled:cursor-not-allowed
-              disabled:bg-slate-50
-            "
+            value={username}
+            onChange={(event) => setUsername(event.target.value)}
           />
         </div>
       </div>
@@ -153,38 +133,14 @@ export function LoginForm() {
             "
           />
 
-          <input
+          <Input
             id="password"
-            type={
-              showPassword
-                ? 'text'
-                : 'password'
-            }
-            value={password}
-            onChange={(event) =>
-              setPassword(
-                event.target.value,
-              )
-            }
-            autoComplete="current-password"
+            name="password"
+            type="password"
+            label="Password"
             placeholder="Enter your password"
-            disabled={isLoading}
-            className="
-              w-full rounded-xl
-              border border-slate-200
-              bg-white
-              py-3 pl-10 pr-11
-              text-sm text-slate-800
-              outline-none
-              transition
-              placeholder:text-slate-400
-              hover:border-slate-300
-              focus:border-violet-400
-              focus:ring-4
-              focus:ring-violet-50
-              disabled:cursor-not-allowed
-              disabled:bg-slate-50
-            "
+            value={password}
+            onChange={(event) => setPassword(event.target.value)}
           />
 
           <button
@@ -239,53 +195,15 @@ export function LoginForm() {
       )}
 
       {/* Submit */}
-      <button
+      <Button
         type="submit"
-        disabled={isLoading}
-        className="
-          group
-          flex w-full
-          items-center justify-center
-          gap-2
-          rounded-xl
-          bg-violet-600
-          px-4 py-3
-          text-sm font-semibold
-          text-white
-          shadow-sm
-          transition
-          hover:bg-violet-700
-          hover:shadow-md
-          focus:outline-none
-          focus:ring-4
-          focus:ring-violet-100
-          disabled:cursor-not-allowed
-          disabled:opacity-60
-        "
+        variant="primary"
+        size="lg"
+        fullWidth
+        loading={isLoading}
       >
-        {isLoading ? (
-          <>
-            <LoaderCircle
-              size={17}
-              className="animate-spin"
-            />
-
-            Signing in...
-          </>
-        ) : (
-          <>
-            Sign in
-
-            <ArrowRight
-              size={17}
-              className="
-                transition-transform
-                group-hover:translate-x-0.5
-              "
-            />
-          </>
-        )}
-      </button>
+        {isLoading ? 'Signing in...' : 'Sign in'}
+      </Button>
     </form>
   )
 }

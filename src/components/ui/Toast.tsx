@@ -88,7 +88,7 @@ export function ToastContainer({
   children,
 }: ToastContainerProps) {
   return (
-    <div className="pointer-events-none fixed inset-x-4 bottom-4 z-[200] flex flex-col items-end gap-2 sm:left-auto sm:w-auto">
+    <div className="pointer-events-none fixed inset-x-4 bottom-4 z-200 flex flex-col items-end gap-2 sm:left-auto sm:w-auto">
       <div className="pointer-events-auto flex w-full flex-col items-end gap-2">
         {children}
       </div>

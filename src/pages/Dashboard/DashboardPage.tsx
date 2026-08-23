@@ -12,6 +12,9 @@ import { AppShell } from '../../components/layout/AppShell'
 import { useBoardTasks } from '../../features/board/hooks/useBoardTasks'
 import type { TaskStatus } from '../../types/task.types'
 
+import { Button } from '../../components/ui/Button'
+import { Skeleton } from '../../components/ui/Skeleton'
+
 const statusLabels: Record<TaskStatus, string> = {
   backlog: 'Backlog',
   'in-progress': 'In Progress',
@@ -132,25 +135,38 @@ export function DashboardPage() {
             </p>
           </div>
 
-          <button
+          <Button
             type="button"
             onClick={() => navigate('/board')}
-            className="inline-flex w-fit items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-violet-700"
+            size="md"
           >
             Open Sprint Board
             <ArrowRight size={16} />
-          </button>
+          </Button>
         </div>
 
         {/* Loading */}
         {isLoading && (
-          <div className="flex min-h-64 items-center justify-center rounded-2xl border border-slate-200 bg-white">
-            <div className="flex items-center gap-2 text-sm text-slate-500">
-              <RotateCcw
-                size={17}
-                className="animate-spin"
+          <div className="rounded-2xl border border-slate-200 bg-white p-5">
+            <div className="space-y-4">
+              <Skeleton className="h-6 w-48" />
+
+              <Skeleton
+                variant="text"
+                className="h-4 w-72"
               />
-              Loading sprint data...
+
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <Skeleton variant="card" className="h-32" />
+                <Skeleton variant="card" className="h-32" />
+                <Skeleton variant="card" className="h-32" />
+                <Skeleton variant="card" className="h-32" />
+              </div>
+
+              <div className="grid gap-6 lg:grid-cols-2">
+                <Skeleton variant="card" className="h-64" />
+                <Skeleton variant="card" className="h-64" />
+              </div>
             </div>
           </div>
         )}
@@ -312,14 +328,15 @@ export function DashboardPage() {
                   </p>
                 </div>
 
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
+                  size="sm"
                   onClick={() => navigate('/board')}
-                  className="inline-flex items-center gap-1 text-xs font-semibold text-violet-600 hover:text-violet-700"
                 >
                   View all
                   <ArrowRight size={14} />
-                </button>
+                </Button>
               </div>
 
               <div className="divide-y divide-slate-100">

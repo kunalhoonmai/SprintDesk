@@ -21,6 +21,8 @@ import { useCommentsStore } from '../../features/comments/comments.store'
 import { TaskDrawerHeader } from './TaskDrawerHeader'
 import { TaskDrawerField } from './TaskDrawerField'
 
+import { Select } from '../../components/ui/Select'
+
 interface TaskDrawerProps {
   task: Task | null
   users: User[]
@@ -221,55 +223,34 @@ export function TaskDrawer({
             {/* Status + Priority */}
             <div className="grid gap-5 sm:grid-cols-2">
               <TaskDrawerField label="Status">
-                <select
+                <Select
+                  label="Status"
                   value={status}
                   onChange={(event) =>
-                    setStatus(
-                      event.target.value as TaskStatus,
-                    )
+                    setStatus(event.target.value as TaskStatus)
                   }
-                  className={inputClasses}
-                >
-                  <option value="backlog">
-                    Backlog
-                  </option>
-
-                  <option value="in-progress">
-                    In Progress
-                  </option>
-
-                  <option value="review">
-                    Review
-                  </option>
-
-                  <option value="done">
-                    Done
-                  </option>
-                </select>
+                  options={[
+                    { label: 'Backlog', value: 'backlog' },
+                    { label: 'In Progress', value: 'in-progress' },
+                    { label: 'Review', value: 'review' },
+                    { label: 'Done', value: 'done' },
+                  ]}
+                />
               </TaskDrawerField>
 
               <TaskDrawerField label="Priority">
-                <select
+                <Select
+                  label="Priority"
                   value={priority}
                   onChange={(event) =>
-                    setPriority(
-                      event.target.value as TaskPriority,
-                    )
+                    setPriority(event.target.value as TaskPriority)
                   }
-                  className={inputClasses}
-                >
-                  <option value="low">
-                    Low
-                  </option>
-
-                  <option value="medium">
-                    Medium
-                  </option>
-
-                  <option value="high">
-                    High
-                  </option>
-                </select>
+                  options={[
+                    { label: 'Low', value: 'low' },
+                    { label: 'Medium', value: 'medium' },
+                    { label: 'High', value: 'high' },
+                  ]}
+                />
               </TaskDrawerField>
             </div>
 
@@ -281,24 +262,17 @@ export function TaskDrawer({
                   className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
                 />
 
-                <select
-                  value={assigneeId}
+                <Select
+                  label="Assignee"
+                  value={String(assigneeId)}
                   onChange={(event) =>
-                    setAssigneeId(
-                      Number(event.target.value),
-                    )
+                    setAssigneeId(Number(event.target.value))
                   }
-                  className={`${inputClasses} pl-9`}
-                >
-                  {users.map((user) => (
-                    <option
-                      key={user.id}
-                      value={user.id}
-                    >
-                      {user.name}
-                    </option>
-                  ))}
-                </select>
+                  options={users.map((user) => ({
+                    label: user.name,
+                    value: String(user.id),
+                  }))}
+                />
               </div>
             </TaskDrawerField>
 

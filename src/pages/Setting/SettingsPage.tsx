@@ -9,12 +9,16 @@ import {
 import { AppShell } from '../../components/layout/AppShell'
 import { useAuth } from '../../features/auth/hooks/useAuth'
 
+import { useThemeStore } from '../../stores/themeStore'
+
 export function SettingsPage() {
   const { user } = useAuth()
 
   const initials = user
     ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`
     : 'U'
+
+  const { theme, toggleTheme } = useThemeStore()
 
   return (
     <AppShell
@@ -108,7 +112,8 @@ export function SettingsPage() {
               icon={Palette}
               title="Appearance"
               description="Customize the look and feel of SprintDesk."
-              action="Default"
+              action={theme === 'dark' ? 'Dark' : 'Light'}
+              onAction={toggleTheme}
             />
 
             <SettingRow
@@ -152,6 +157,7 @@ interface SettingRowProps {
   title: string
   description: string
   action: string
+  onAction?: () => void
 }
 
 function SettingRow({
@@ -159,6 +165,7 @@ function SettingRow({
   title,
   description,
   action,
+  onAction,
 }: SettingRowProps) {
   return (
     <div className="flex flex-col gap-4 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
@@ -180,6 +187,7 @@ function SettingRow({
 
       <button
         type="button"
+        onClick={onAction}
         className="w-fit rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 transition hover:border-violet-200 hover:bg-violet-50 hover:text-violet-600"
       >
         {action}

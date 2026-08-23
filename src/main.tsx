@@ -6,6 +6,12 @@ import { AppProviders } from './app/providers/AppProvider'
 
 import './index.css'
 
+const savedTheme = localStorage.getItem('sprintdesk-theme')
+
+if (savedTheme === 'dark') {
+  document.documentElement.classList.add('dark')
+}
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <AppProviders>

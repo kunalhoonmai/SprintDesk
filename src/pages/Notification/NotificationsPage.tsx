@@ -8,6 +8,8 @@ import {
 import { AppShell } from '../../components/layout/AppShell'
 import { useNotifications } from '../../features/notifications/hooks/useNotifications'
 
+import { Button } from '../../components/ui/Button'
+
 export function NotificationsPage() {
   const {
     notifications,
@@ -36,15 +38,13 @@ export function NotificationsPage() {
           </div>
 
           {unreadCount > 0 && (
-            <button
+            <Button
               type="button"
               onClick={markAllAsRead}
-              className="inline-flex w-fit items-center gap-2 rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-violet-700"
             >
               <CheckCheck size={16} />
-
               Mark all as read
-            </button>
+            </Button>
           )}
         </div>
 
