@@ -22,8 +22,8 @@ const priorityStyles: Record<
   string
 > = {
   low: 'bg-slate-100 text-slate-600',
-  medium: 'bg-amber-50 text-amber-700',
-  high: 'bg-red-50 text-red-700',
+  medium: 'bg-amber-50 text-amber-700 ring-1 ring-amber-100',
+  high: 'bg-red-50 text-red-700 ring-1 ring-red-100',
 }
 
 export function TaskCard({
@@ -58,9 +58,19 @@ export function TaskCard({
       style={style}
       onClick={onClick}
       className={[
-        'group rounded-xl border bg-white p-4 shadow-sm transition',
-        'cursor-pointer',
-        'border-slate-200 hover:-translate-y-0.5 hover:shadow-md',
+        `
+          group rounded-xl border
+          bg-white p-4
+          shadow-sm
+          transition-all duration-200
+          cursor-pointer
+        `,
+        `
+          border-slate-200/80
+          hover:-translate-y-0.5
+          hover:border-violet-200
+          hover:shadow-md
+        `,
         dndDragging || isDragging
           ? 'opacity-30'
           : 'opacity-100',
@@ -76,9 +86,14 @@ export function TaskCard({
             event.stopPropagation()
           }
           className="
-            mt-0.5 shrink-0 touch-none
-            cursor-grab text-slate-300
-            transition hover:text-slate-500
+            mt-0.5 flex h-7 w-6 shrink-0
+            touch-none cursor-grab
+            items-center justify-center
+            rounded-md
+            text-slate-300
+            transition
+            hover:bg-slate-100
+            hover:text-slate-500
             active:cursor-grabbing
           "
         >
@@ -86,17 +101,17 @@ export function TaskCard({
         </button>
 
         <div className="min-w-0 flex-1">
-          <h3 className="text-sm font-semibold leading-5 text-slate-900">
+          <h3 className="text-[14px] font-bold leading-5 text-slate-900">
             {task.title}
           </h3>
 
-          <p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-500">
+          <p className="mt-2.5 line-clamp-3 text-xs leading-5 text-slate-500">
             {task.description}
           </p>
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-3">
+      <div className="mt-5 flex items-center justify-between gap-3 border-t border-slate-100 pt-3">
         <span
           className={[
             'rounded-full px-2 py-1 text-[11px] font-semibold capitalize',
@@ -113,8 +128,10 @@ export function TaskCard({
               className="
                 flex h-7 w-7 items-center
                 justify-center rounded-full
-                bg-violet-100 text-[10px]
-                font-bold text-violet-700
+                bg-violet-100
+                text-[10px] font-bold
+                text-violet-700
+                ring-2 ring-white
               "
             >
               {assignee.name
@@ -127,12 +144,9 @@ export function TaskCard({
             </div>
           )}
 
-          <div className="flex items-center gap-1 text-[11px] text-slate-400">
+          <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-400">
             <CalendarDays size={13} />
-
-            <span>
-              {task.dueDate}
-            </span>
+            <span>{task.dueDate}</span>
           </div>
         </div>
       </div>

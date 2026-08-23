@@ -10,6 +10,7 @@ import {
 import { useState } from 'react'
 
 import { useBoardStore } from '../../features/board/store/board.store'
+import { SwipeSectionIndicator } from '../../components/kanban/SwipeSectionIndicator'
 
 import type {
   Task,
@@ -250,12 +251,21 @@ export function KanbanBoard({
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
+
         <div className="flex h-full min-h-0 flex-col">
           <div
+            id="kanban-mobile-scroll"
             className="
-              grid min-h-0 flex-1 grid-cols-1 gap-4
-              md:grid-cols-2
+              flex min-h-0 flex-1
+              snap-x snap-mandatory
+              gap-4 overflow-x-auto overflow-y-hidden
+              scrollbar-none
+
+              xl:grid
               xl:grid-cols-4
+              xl:gap-4
+              xl:overflow-visible
+              xl:snap-none
             "
           >
             {columns.map((column) => {
@@ -278,17 +288,23 @@ export function KanbanBoard({
                   status={column.status}
                   tasks={columnTasks}
                   users={users}
-                  onTaskClick={(
-                    taskId,
-                  ) =>
-                    setSelectedTaskId(
-                      taskId,
-                    )
+                  onTaskClick={(taskId) =>
+                    setSelectedTaskId(taskId)
                   }
                 />
               )
             })}
           </div>
+
+          <SwipeSectionIndicator
+            containerId="kanban-mobile-scroll"
+            sections={[
+              'Backlog',
+              'In Progress',
+              'Review',
+              'Done',
+            ]}
+          />
         </div>
 
         <DragOverlay>

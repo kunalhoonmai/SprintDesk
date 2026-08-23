@@ -466,3 +466,18 @@ select {
     border-color 200ms ease,
     color 200ms ease;
 }
+
+/* =========================================================
+   Mobile horizontal kanban
+   ========================================================= */
+
+@media (max-width: 1279px) {
+  .scrollbar-none {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}

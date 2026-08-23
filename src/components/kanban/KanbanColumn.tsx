@@ -48,27 +48,34 @@ export function KanbanColumn({
     <section
       ref={setNodeRef}
       className={[
-        'flex min-h-0 flex-col rounded-2xl p-3 transition-colors',
+        `
+          flex min-h-0
+          min-w-[calc(100vw-2rem)]
+          snap-center
+          flex-col rounded-2xl p-3
+          transition-colors
+          xl:min-w-0
+        `,
         isOver
           ? 'bg-violet-50 ring-2 ring-violet-200'
           : 'bg-slate-100/70',
       ].join(' ')}
     >
       {/* Column Header */}
-      <header className="mb-3 shrink-0 px-2 py-1">
-        <div className="flex items-center gap-2">
+      <header className="mb-3 shrink-0 px-1 py-1">
+        <div className="flex items-center gap-2.5">
           <span
             className={[
-              'h-2 w-2 rounded-full',
+              'h-2.5 w-2.5 rounded-full',
               statusDotStyles[status],
             ].join(' ')}
           />
 
-          <h2 className="text-sm font-semibold text-slate-800">
+          <h2 className="text-sm font-bold text-slate-900">
             {title}
           </h2>
 
-          <span className="rounded-full bg-white px-2 py-0.5 text-[11px] font-semibold text-slate-500 shadow-sm">
+          <span className="flex h-6 min-w-6 items-center justify-center rounded-full bg-white px-2 text-[11px] font-bold text-slate-500 shadow-sm ring-1 ring-slate-200/70">
             {tasks.length}
           </span>
         </div>
@@ -95,17 +102,22 @@ export function KanbanColumn({
         })}
 
         {tasks.length === 0 && (
-          <div
-            className={[
-              'flex min-h-32 items-center justify-center rounded-xl border border-dashed text-xs transition-colors',
-              isOver
-                ? 'border-violet-300 bg-violet-50 text-violet-500'
-                : 'border-slate-300 text-slate-400',
-            ].join(' ')}
-          >
-            Drop task here
-          </div>
-        )}
+        <div
+          className={[
+            `
+              flex min-h-32 items-center justify-center
+              rounded-xl border border-dashed
+              text-xs font-medium
+              transition-colors
+            `,
+            isOver
+              ? 'border-violet-300 bg-violet-50 text-violet-600'
+              : 'border-slate-300 bg-white/50 text-slate-400',
+          ].join(' ')}
+        >
+          Drop task here
+        </div>
+      )}
       </div>
     </section>
   )
