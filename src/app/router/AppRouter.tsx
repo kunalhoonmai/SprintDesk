@@ -9,6 +9,8 @@ import {
 import { BoardPage } from '../../pages/Board/BoardPage'
 import { DashboardPage } from '../../pages/Dashboard/DashboardPage'
 import { AnalyticsPage } from '../../pages/Analytics/AnalyticsPage'
+import { NotificationsPage } from '../../pages/Notification/NotificationsPage'
+import { SettingsPage } from '../../pages/Setting/SettingsPage'
 
 import { LoginPage } from '../../pages/Login/LoginPage'
 
@@ -76,6 +78,16 @@ export function AppRouter() {
           <Route
             path="/analytics"
             element={<AnalyticsPage />}
+          />
+
+          <Route
+            path="/notifications"
+            element={<NotificationsPage />}
+          />
+
+          <Route
+            path="/settings"
+            element={<SettingsPage />}
           />
         </Route>
 

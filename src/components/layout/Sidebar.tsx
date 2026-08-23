@@ -7,6 +7,7 @@ import {
   X,
 } from 'lucide-react'
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '../../features/auth/hooks/useAuth'
 
 interface SidebarProps {
   mobileOpen?: boolean
@@ -44,7 +45,16 @@ const secondaryNavigation = [
   },
 ]
 
-export function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
+export function Sidebar({
+  mobileOpen = false,
+  onClose,
+}: SidebarProps) {
+  const { user } = useAuth()
+
+  const initials = user
+    ? `${user.firstName?.[0] ?? ''}${user.lastName?.[0] ?? ''}`
+    : 'U'
+
   return (
     <>
       {mobileOpen && (
@@ -154,17 +164,28 @@ export function Sidebar({ mobileOpen = false, onClose }: SidebarProps) {
         </nav>
 
         <div className="border-t border-slate-200 p-4">
-          <div className="flex items-center gap-3 rounded-xl bg-slate-50 p-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-violet-100 text-xs font-semibold text-violet-700">
-              AJ
-            </div>
+          <div className="flex items-center gap-3 rounded-2xl bg-slate-50 p-3">
+            {user?.image ? (
+              <img
+                src={user.image}
+                alt={`${user.firstName} ${user.lastName}`}
+                className="h-10 w-10 shrink-0 rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-700">
+                {initials}
+              </div>
+            )}
 
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-slate-800">
-                Alex Johnson
+              <p className="truncate text-sm font-semibold text-slate-900">
+                {user
+                  ? `${user.firstName} ${user.lastName}`
+                  : 'User'}
               </p>
-              <p className="truncate text-xs text-slate-500">
-                Product Manager
+
+              <p className="truncate text-xs text-slate-400">
+                {user?.email ?? user?.username ?? ''}
               </p>
             </div>
           </div>

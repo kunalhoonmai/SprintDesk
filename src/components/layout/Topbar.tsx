@@ -2,11 +2,15 @@ import { useEffect, useRef, useState } from 'react'
 import {
   Bell,
   Check,
+  LogOut,
   Menu,
   Search,
 } from 'lucide-react'
 
 import { useNotifications } from '../../features/notifications/hooks/useNotifications'
+import { useBoardStore } from '../../features/board/store/board.store'
+import { useTaskSearch } from '../../features/search/hooks/useTaskSearch'
+import { useAuth } from '../../features/auth/hooks/useAuth'
 
 interface TopbarProps {
   onMenuClick: () => void
@@ -32,6 +36,59 @@ export function Topbar({
   const notificationRef =
     useRef<HTMLDivElement>(null)
 
+  const {
+    user,
+    logout,
+  } = useAuth()
+
+  const [profileOpen, setProfileOpen] =
+    useState(false)
+
+  const profileRef =
+    useRef<HTMLDivElement>(null)
+
+  const tasks = useBoardStore(
+    (state) => state.tasks,
+  )
+
+  const [searchOpen, setSearchOpen] =
+    useState(false)
+
+  const [searchQuery, setSearchQuery] =
+    useState('')
+
+  const searchInputRef =
+    useRef<HTMLInputElement>(null)
+
+  const { results, hasResults } =
+    useTaskSearch({
+      tasks,
+      query: searchQuery,
+    })
+
+  useEffect(() => {
+    function handleKeyDown(
+      event: KeyboardEvent,
+    ) {
+      if (event.key === 'Escape') {
+        setSearchOpen(false)
+        setSearchQuery('')
+      }
+    }
+
+    document.addEventListener(
+      'keydown',
+      handleKeyDown,
+    )
+
+    return () => {
+      document.removeEventListener(
+        'keydown',
+        handleKeyDown,
+      )
+    }
+  }, [])
+
   useEffect(() => {
     function handleOutsideClick(
       event: MouseEvent,
@@ -43,6 +100,33 @@ export function Topbar({
         )
       ) {
         setNotificationsOpen(false)
+      }
+    }
+
+    document.addEventListener(
+      'mousedown',
+      handleOutsideClick,
+    )
+
+    return () => {
+      document.removeEventListener(
+        'mousedown',
+        handleOutsideClick,
+      )
+    }
+  }, [])
+
+  useEffect(() => {
+    function handleOutsideClick(
+      event: MouseEvent,
+    ) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(
+          event.target as Node,
+        )
+      ) {
+        setProfileOpen(false)
       }
     }
 
@@ -85,13 +169,109 @@ export function Topbar({
         </div>
       </div>
 
+      {searchOpen && (
+      <div className="absolute right-4 top-14 z-40 w-[calc(100vw-2rem)] max-w-md sm:right-6 sm:w-96 lg:right-8">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10">
+
+          {/* Search input */}
+          <div className="p-3">
+            <div className="flex items-center gap-2 rounded-xl border border-violet-300 bg-white px-3 py-2.5 ring-2 ring-violet-100">
+              <Search
+                size={18}
+                className="shrink-0 text-slate-400"
+              />
+
+              <input
+                ref={searchInputRef}
+                value={searchQuery}
+                onChange={(event) =>
+                  setSearchQuery(event.target.value)
+                }
+                placeholder="Search tasks..."
+                autoFocus
+                className="min-w-0 flex-1 bg-transparent text-sm text-slate-800 outline-none placeholder:text-slate-400"
+              />
+
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="shrink-0 text-xs font-medium text-slate-400 transition hover:text-slate-600"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Results */}
+          {searchQuery.trim() && (
+            <div className="max-h-80 overflow-y-auto border-t border-slate-100">
+              {!hasResults ? (
+                <div className="px-4 py-8 text-center">
+                  <Search
+                    size={24}
+                    className="mx-auto text-slate-300"
+                  />
+
+                  <p className="mt-2 text-sm font-medium text-slate-600">
+                    No tasks found
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-400">
+                    Try a different search term.
+                  </p>
+                </div>
+              ) : (
+                <div className="p-2">
+                  {results.map((task) => (
+                    <button
+                      key={task.id}
+                      type="button"
+                      onClick={() => {
+                        setSearchOpen(false)
+                        setSearchQuery('')
+                      }}
+                      className="w-full rounded-xl px-3 py-3 text-left transition hover:bg-slate-50"
+                    >
+                      <p className="truncate text-sm font-semibold text-slate-800">
+                        {task.title}
+                      </p>
+
+                      <div className="mt-1.5 flex items-center gap-2">
+                        <span className="rounded-full bg-violet-50 px-2 py-0.5 text-[10px] font-semibold capitalize text-violet-600">
+                          {task.status}
+                        </span>
+
+                        <span className="text-[11px] capitalize text-slate-400">
+                          {task.priority}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
+    )}
+
       {/* Right */}
       <div className="flex items-center gap-2 sm:gap-3">
         {/* Search */}
         <button
           type="button"
-          aria-label="Search"
-          className="rounded-xl p-2.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
+          onClick={() =>
+            setSearchOpen((open) => !open)
+          }
+          aria-label="Search tasks"
+          className={[
+            'rounded-xl p-2.5 transition',
+            searchOpen
+              ? 'bg-violet-50 text-violet-600'
+              : 'text-slate-500 hover:bg-slate-100 hover:text-slate-800',
+          ].join(' ')}
         >
           <Search size={19} />
         </button>
@@ -255,19 +435,91 @@ export function Topbar({
         <div className="hidden h-8 w-px bg-slate-200 sm:block" />
 
         {/* Profile */}
-        <button
-          type="button"
-          aria-label="Open profile menu"
-          className="flex items-center gap-2 rounded-xl p-1.5 transition hover:bg-slate-100"
+        <div
+          ref={profileRef}
+          className="relative"
         >
-          <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-full bg-violet-100 text-xs font-bold text-violet-700">
-            AJ
-          </div>
+          <button
+            type="button"
+            onClick={() =>
+              setProfileOpen(
+                (open) => !open,
+              )
+            }
+            aria-label="Open profile menu"
+            aria-expanded={profileOpen}
+            className="flex items-center gap-2 rounded-xl p-1.5 transition hover:bg-slate-100"
+          >
+            {user?.image ? (
+              <img
+                src={user.image}
+                alt={`${user.firstName} ${user.lastName}`}
+                className="h-8 w-8 rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-violet-100 text-xs font-bold text-violet-700">
+                {user?.firstName?.[0] ?? 'U'}
+                {user?.lastName?.[0] ?? ''}
+              </div>
+            )}
 
-          <span className="hidden text-sm font-medium text-slate-700 md:block">
-            Alex
-          </span>
-        </button>
+            <span className="hidden text-sm font-medium text-slate-700 md:block">
+              {user
+                ? `${user.firstName} ${user.lastName}`
+                : 'User'}
+            </span>
+          </button>
+
+          {profileOpen && (
+            <div className="absolute right-0 top-12 z-50 w-64 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10">
+              {/* User information */}
+              <div className="border-b border-slate-100 px-4 py-4">
+                <div className="flex items-center gap-3">
+                  {user?.image ? (
+                    <img
+                      src={user.image}
+                      alt={`${user.firstName} ${user.lastName}`}
+                      className="h-10 w-10 rounded-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-sm font-bold text-violet-700">
+                      {user?.firstName?.[0] ?? 'U'}
+                      {user?.lastName?.[0] ?? ''}
+                    </div>
+                  )}
+
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-slate-900">
+                      {user
+                        ? `${user.firstName} ${user.lastName}`
+                        : 'User'}
+                    </p>
+
+                    <p className="truncate text-xs text-slate-400">
+                      {user?.email ?? ''}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Logout */}
+              <div className="p-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setProfileOpen(false)
+                    logout()
+                  }}
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-red-600 transition hover:bg-red-50"
+                >
+                  <LogOut size={17} />
+
+                  <span>Logout</span>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   )
