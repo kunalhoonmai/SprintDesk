@@ -17,22 +17,12 @@ import { Input } from '../../../components/ui/Input'
 export function LoginForm() {
   const navigate = useNavigate()
 
-  const {
-    login,
-    isLoading,
-  } = useAuth()
+  const { login, isLoading } = useAuth()
 
-  const [username, setUsername] =
-    useState('')
-
-  const [password, setPassword] =
-    useState('')
-
-  const [showPassword, setShowPassword] =
-    useState(false)
-
-  const [error, setError] =
-    useState('')
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState('')
 
   async function handleSubmit(
     event: FormEvent<HTMLFormElement>,
@@ -42,26 +32,17 @@ export function LoginForm() {
     setError('')
 
     if (!username.trim()) {
-      setError(
-        'Please enter your username.',
-      )
-
+      setError('Please enter your username.')
       return
     }
 
     if (!password) {
-      setError(
-        'Please enter your password.',
-      )
-
+      setError('Please enter your password.')
       return
     }
 
     try {
-      await login(
-        username.trim(),
-        password,
-      )
+      await login(username.trim(), password)
 
       navigate('/dashboard', {
         replace: true,
@@ -82,100 +63,72 @@ export function LoginForm() {
     >
       {/* Username */}
       <div>
-        <label
-          htmlFor="username"
-          className="mb-2 block text-sm font-semibold text-slate-700"
-        >
-          Username
-        </label>
-
-        <div className="relative">
-          <UserRound
-            size={17}
-            className="
-              pointer-events-none
-              absolute left-3.5 top-1/2
-              -translate-y-1/2
-              text-slate-400
-            "
-          />
-
-          <Input
-            id="username"
-            name="username"
-            label="Username"
-            placeholder="Enter your username"
-            value={username}
-            onChange={(event) => setUsername(event.target.value)}
-          />
-        </div>
+        <Input
+          id="username"
+          name="username"
+          type="text"
+          label="Username"
+          placeholder="Enter your username"
+          value={username}
+          onChange={(event) =>
+            setUsername(event.target.value)
+          }
+          leftIcon={<UserRound size={18} strokeWidth={1.8} />}
+          autoComplete="username"
+        />
       </div>
 
       {/* Password */}
       <div>
-        <div className="mb-2 flex items-center justify-between">
-          <label
-            htmlFor="password"
-            className="text-sm font-semibold text-slate-700"
-          >
-            Password
-          </label>
-        </div>
-
-        <div className="relative">
-          <LockKeyhole
-            size={17}
-            className="
-              pointer-events-none
-              absolute left-3.5 top-1/2
-              -translate-y-1/2
-              text-slate-400
-            "
-          />
-
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            label="Password"
-            placeholder="Enter your password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-          />
-
-          <button
-            type="button"
-            onClick={() =>
-              setShowPassword(
-                (value) => !value,
-              )
-            }
-            disabled={isLoading}
-            aria-label={
-              showPassword
-                ? 'Hide password'
-                : 'Show password'
-            }
-            className="
-              absolute right-3
-              top-1/2
-              flex h-8 w-8
-              -translate-y-1/2
-              items-center justify-center
-              rounded-lg
-              text-slate-400
-              transition
-              hover:bg-slate-100
-              hover:text-slate-600
-            "
-          >
-            {showPassword ? (
-              <EyeOff size={17} />
-            ) : (
-              <Eye size={17} />
-            )}
-          </button>
-        </div>
+        <Input
+          id="password"
+          name="password"
+          type={showPassword ? 'text' : 'password'}
+          label="Password"
+          placeholder="Enter your password"
+          value={password}
+          onChange={(event) =>
+            setPassword(event.target.value)
+          }
+          leftIcon={
+            <LockKeyhole
+              size={18}
+              strokeWidth={1.8}
+            />
+          }
+          rightIcon={
+            <button
+              type="button"
+              onClick={() =>
+                setShowPassword((value) => !value)
+              }
+              disabled={isLoading}
+              aria-label={
+                showPassword
+                  ? 'Hide password'
+                  : 'Show password'
+              }
+              className="
+                flex h-8 w-8
+                items-center justify-center
+                rounded-lg
+                text-slate-400
+                transition
+                hover:bg-slate-100
+                hover:text-slate-600
+                dark:hover:bg-slate-800
+                dark:hover:text-slate-300
+              "
+            >
+              {showPassword ? (
+                <EyeOff size={17} strokeWidth={1.8} />
+              ) : (
+                <Eye size={17} strokeWidth={1.8} />
+              )}
+            </button>
+          }
+          autoComplete="current-password"
+        />
       </div>
 
       {/* Error */}
@@ -184,10 +137,16 @@ export function LoginForm() {
           role="alert"
           className="
             rounded-xl
-            border border-red-200
+            border
+            border-red-200
             bg-red-50
-            px-4 py-3
-            text-sm text-red-700
+            px-4
+            py-3
+            text-sm
+            text-red-700
+            dark:border-red-900/50
+            dark:bg-red-950/40
+            dark:text-red-300
           "
         >
           {error}
@@ -202,7 +161,9 @@ export function LoginForm() {
         fullWidth
         loading={isLoading}
       >
-        {isLoading ? 'Signing in...' : 'Sign in'}
+        {isLoading
+          ? 'Signing in...'
+          : 'Sign in'}
       </Button>
     </form>
   )
